@@ -24,7 +24,7 @@ try{
         "COMMENTS" => "ПРИВЕТ НОВЫЙ ЛИД"
     ];
         
-    $response = $client->createLead($data);
+    $response = $client->createLead(($data));
     //$response = $client->getLeads();
     
     print_r(json_decode($response, true));
@@ -40,8 +40,12 @@ try{
    // $response=$client->getContacts();
     //print_r(json_decode($response, true));
     
-}  catch (\Exception $e) {
+} catch (\atlasBitrixRestApi\Exceptions\CustomRESTapiException $e) {
+        echo $e->getMessage()."ИДФ\n";
+}  
+
+catch (\Exception $e) {
         echo $e->getMessage()."\n";
-}
+} 
 
 

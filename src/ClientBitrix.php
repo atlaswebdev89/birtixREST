@@ -2,6 +2,8 @@
 
 namespace atlasBitrixRestApi;
 
+use atlasBitrixRestApi\Exceptions as Custom;
+
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Respect\Validation\Validator;
@@ -65,14 +67,14 @@ class ClientBitrix {
         if(isset($this->domain, $this->hooks, $this->uri_api)  && !(empty($this->domain)) && !(empty($this->hooks)) && !empty($this->uri_api)) {
             return "https://".$this->domain.".bitrix24.by/".$this->hooks."/".$this->uri_api;
         }else 
-            throw new \Exception("Проверьте правильность указанных параметров");
+            throw new Custom\DataException("Проверьте правильность указанных параметров для API (domain/hook/uriAPI)");
     }
     
    
     //Функция создания лида в bitrix24
     public function createLead (array $data_lead) {
-        
-        //Проверка контакта в битриксе с указанами телефонном или e-mail
+
+        //Проверка контакта в битриксе с указаннами телефонном или e-mail
         $data_lead = $this->searchContactIDforPhone($data_lead);
         $data_lead = $this->searchContactIDforEmail($data_lead);
         
@@ -82,7 +84,10 @@ class ClientBitrix {
                         [
                             "body" =>  $data
                         ]);
-        return $response->getBody();
+                    
+                    if ($response->getStatusCode() == 200) {
+                            return json_encode(["status" => true, "message" => "Новый лид успешно добален"]);
+                    }
     }
     
     //Получение всех лидов в битрикс24
@@ -95,14 +100,14 @@ class ClientBitrix {
     public function getContacts ($data = []) {
             if(isset($data) && !empty($data)) {
                 $data  = http_build_query($data);
-                $response = $this->container['http']->request('POST', $this->get_full_URI(), ["body" => $data]);
-            }else {
-                $response = $this->container['http']->request('GET', $this->get_full_URI());
-            }
+                        $response = $this->container['http']->request('POST', $this->get_full_URI(), ["body" => $data]);
+                }else {
+                        $response = $this->container['http']->request('GET', $this->get_full_URI());
+                }
         return $response->getBody();
     }
     
-     //Функция удаление лишних слешей
+    //Функция удаление лишних слешей
     protected function str_clear ($str) {
         return trim($str, "/");
     }
@@ -111,7 +116,7 @@ class ClientBitrix {
         if(is_array($data) && !empty($data)) {
             return http_build_query(["fields" => $data]);
         }else {
-            throw new \Exception ("Проверьте массив данных");
+            throw new Custom\DataException ("Проверьте массив данных для добавления нового лида (пустой или не массив");
         }
     }
     
@@ -129,36 +134,29 @@ class ClientBitrix {
             return $data;
         }
             
-       
         //Проверка номера телефона на наличие в базе контактов Битрикс24
             foreach ($number as $item) {
-                $filter_phone =[
-                        "filter" => [
-                            "PHONE" => $item,
-                        ],
-                        "select" => [
-                            "ID"
-                        ]
-                    ];
-                
-                $this->setUriApi("crm.contact.list");
-                
-                $result = json_decode($this->getContacts($filter_phone), true);
+                    $filter_phone =[
+                            "filter" => [
+                                "PHONE" => $item,
+                            ],
+                            "select" => [
+                                "ID"
+                            ]
+                        ];
+                    $this->setUriApi("crm.contact.list");
+                    $result = json_decode($this->getContacts($filter_phone), true);
 
-                if($result["total"] > 0) {
-                    $CONTACT_ID = $result["result"][0]["ID"];
-                    
-                    break;
-                }
-                
+                    if($result["total"] > 0) {
+                        $CONTACT_ID = $result["result"][0]["ID"];
+                        break;
+                    }
             }
          
-            if(isset($CONTACT_ID) && !empty($CONTACT_ID)) {
-                $data ["CONTACT_ID"] =  $CONTACT_ID;
-            }
-        
-        $this->setUriApi($current_hook);
-        
+                if(isset($CONTACT_ID) && !empty($CONTACT_ID)) {
+                        $data ["CONTACT_ID"] =  $CONTACT_ID;
+                }
+            $this->setUriApi($current_hook);
         return $data;
     }
     
