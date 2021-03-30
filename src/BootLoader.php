@@ -10,10 +10,10 @@ class BootLoader {
     
     static public function registerFactory () {
             $container = new Pimple();
-            //GuzzleHttpClient
-            $container['http'] = function () {
-                return new Client();
-            };
+                //GuzzleHttpClient
+                $container['http'] = function () {
+                    return new Client();
+                };
         return $container;
     }
 }
