@@ -4,6 +4,7 @@
 ### Установка
 
 ### Использование
+*********************
 
 Для начала необходимо добавить входящий вебхук в консоле управления bitrix24 
 
@@ -66,17 +67,17 @@ json_decode($response, true));
 
 Ответ приходит в JSON. Необходимо обработать функцией json_decode
 
-  
+************  
 ### Доступные методы
-
+************
 **Получение списка контактов из битрикс24**
 
 ```php
 $client->setUriApi("crm.contact.list");
 $response=$client->getContacts();
 ```
-
-**Получение списка контактов из битрикс24 используюя фильтр**
+*****************
+**Получение списка контактов из битрикс24 используя фильтр**
 
 ```php
 $filter_phone =[
@@ -93,7 +94,7 @@ $response=$client->getContacts(filter_phone);
 Полное описание в официальной документации
 
 https://dev.1c-bitrix.ru/rest_help/crm/contacts/crm_contact_list.php
-
+******************
 
 **Получение списка лидов из битрикс24**
 
@@ -101,3 +102,4 @@ https://dev.1c-bitrix.ru/rest_help/crm/contacts/crm_contact_list.php
 $client->setUriApi("crm.lead.list");
 $response=$client->getLeads();
 ```
+*************
