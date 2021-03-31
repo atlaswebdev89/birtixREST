@@ -68,3 +68,36 @@ json_decode($response, true));
 
   
 ### Доступные методы
+
+**Получение списка контактов из битрикс24**
+
+```php
+$client->setUriApi("crm.contact.list");
+$response=$client->getContacts();
+```
+
+**Получение списка контактов из битрикс24 используюя фильтр**
+
+```php
+$filter_phone =[
+                            "filter" => [
+                                "PHONE" => "номер телефона",
+                            ],
+                            "select" => [
+                                "ID"
+                            ]
+                        ];
+$client->setUriApi("crm.contact.list");
+$response=$client->getContacts(filter_phone);
+```
+Полное описание в официальной документации
+
+https://dev.1c-bitrix.ru/rest_help/crm/contacts/crm_contact_list.php
+
+
+**Получение списка лидов из битрикс24**
+
+```php
+$client->setUriApi("crm.lead.list");
+$response=$client->getLeads();
+```

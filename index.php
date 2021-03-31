@@ -24,25 +24,9 @@ try{
         "COMMENTS" => "ПРИВЕТ НОВЫЙ ЛИД",
         "UTM_SOURCE" => "form_site"
     ];
-    
-    
-    
-    
+
     $response = $client->createLead(($data));
-    //$response = $client->getLeads();
-    
     print_r(json_decode($response, true));
-    
-    //$client->setUriApi("crm.lead.add.json");
-    //$response = $client->createLead($data);
-    
-    //print_r(json_decode($response, true));
-    
-        
-    
-    //$client->setUriApi("crm.contact.list");
-   // $response=$client->getContacts();
-    //print_r(json_decode($response, true));
     
 } catch (\atlasBitrixRestApi\Exceptions\CustomRESTapiException $e) {
         echo $e->getMessage()."  ИДФ\n";
