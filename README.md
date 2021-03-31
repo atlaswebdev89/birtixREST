@@ -32,7 +32,7 @@ $client = new \atlasBitrixRestApi\ClientBitrix();
 ```
 
 
-Формируем массив данных для нового лида 
+Формируем массив данных для нового лида (обычно используются данные полей формы на сайте) 
 
 ```php
 $data = [
@@ -58,5 +58,14 @@ $data = [
 
 https://dev.1c-bitrix.ru/rest_help/crm/leads/crm_lead_fields.php
 
+Выполняем запрос на создание в битрикс24 нового лида
 
+```php
+$response = $client->createLead(($data)); 
+json_decode($response, true));
+```
+
+Ответ приходит в JSON. Необходимо обработать функцией json_decode
+
+  
 ### Доступные методы
