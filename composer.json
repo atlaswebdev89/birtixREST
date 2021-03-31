@@ -1,5 +1,5 @@
 {
-    "name": "atlas/bitrix-rest-api",
+    "name": "atlas89/bitrix-rest-api",
     "description": "A simple package for transferring orders from the site to bitrix24",
     "type": "library",
     "require": {
