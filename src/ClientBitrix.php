@@ -6,10 +6,10 @@ use atlasBitrixRestApi\Exceptions as Custom;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
-use Respect\Validation\Validator;
+use Respect\Validation\Validator as V;
 use \Respect\Validation\Exceptions\ValidationException;
 
-class ClientBitrix {
+class ClientBitrix implements \atlasBitrixRestApi\Interfaces\ClientInterface {
     
     public $domain;
     public $hooks;
@@ -116,7 +116,7 @@ class ClientBitrix {
         if(is_array($data) && !empty($data)) {
             return http_build_query(["fields" => $data]);
         }else {
-            throw new Custom\DataException ("Проверьте массив данных для добавления нового лида (пустой или не массив");
+            throw new Custom\DataException ("Проверьте массив данных для добавления нового лида (пустой или не массив)");
         }
     }
     
@@ -127,7 +127,7 @@ class ClientBitrix {
         if(array_key_exists("PHONE", $data) && !empty($data["PHONE"])) {
             foreach ($data["PHONE"] as $item) {
                 if(isset($item["VALUE"])) {
-                    $number [] = $item["VALUE"];
+                    $number [] = $this->validPhone($item["VALUE"]);
                 }
             }
         } else {
@@ -167,7 +167,7 @@ class ClientBitrix {
         if(array_key_exists("EMAIL", $data) && !empty($data["EMAIL"])) {
             foreach ($data["EMAIL"] as $item) {
                 if(isset($item["VALUE"])) {
-                    $number [] = $item["VALUE"];
+                    $number [] = $this->validEmail($item["VALUE"]);
                 }
             }
         } else {
@@ -202,5 +202,33 @@ class ClientBitrix {
         $this->setUriApi($current_hook);
         
         return $data;
+    }
+    
+    //Валидация номера телефона с помощью RespectValidation
+    protected function validPhone ($phone) {
+            if(isset($phone) && !empty($phone)) {
+                $pattern = "/^[^a-zа-я]+$/i";
+                if(!preg_match($pattern, $phone)) {
+                     throw new Custom\DataException ("Проверьте указанный номер телефона");
+                }
+                    //Убераем из номера все кроме знака + и цифр
+                        $pattern = "/[+]?+[^0-9]+/";
+                        $number =  preg_replace($pattern, '', $phone);
+                    //Проверяем валидатором
+                    V::notEmpty()->alnum('+')->assert($number);
+            }else {
+                throw new Custom\DataException ("Пустое значение номера телефона адреса");
+            }
+        return $number;
+    }
+    
+    //валидация email с помощью respectValidation
+    protected function validEmail ($email) {
+            if(isset($email) && !empty($email)) {
+                V::notEmpty()->email()->assert($email);
+            }else {
+                throw new Custom\DataException ("Пустое значение e-mail адреса");
+            }
+        return $email;
     }
 }

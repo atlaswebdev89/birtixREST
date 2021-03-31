@@ -16,14 +16,18 @@ try{
         "OPPORTUNITY" => 12500,
         "PHONE" => [ 
                         [ "VALUE" =>"+3752972933862", "VALUE_TYPE" => "WORK"],
-                        [ "VALUE" =>"231", "VALUE_TYPE" => "HOME"],
+                        [ "VALUE" =>"231", "VALUE_TYPE" => "WORK"],
                     ],
         "EMAIL" => [
                         ['VALUE' => "doroshuk33@yandex.by", 'VALUE_TYPE' => 'HOME'],
                 ],
-        "COMMENTS" => "ПРИВЕТ НОВЫЙ ЛИД"
+        "COMMENTS" => "ПРИВЕТ НОВЫЙ ЛИД",
+        "UTM_SOURCE" => "form_site"
     ];
-        
+    
+    
+    
+    
     $response = $client->createLead(($data));
     //$response = $client->getLeads();
     
@@ -41,7 +45,7 @@ try{
     //print_r(json_decode($response, true));
     
 } catch (\atlasBitrixRestApi\Exceptions\CustomRESTapiException $e) {
-        echo $e->getMessage()."ИДФ\n";
+        echo $e->getMessage()."  ИДФ\n";
 }  
 
 catch (\Exception $e) {
