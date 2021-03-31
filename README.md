@@ -5,7 +5,7 @@
 
 С помощью composer
 ```php
-composer require 
+composer require atlas89/bitrix-createleads-api
 ```
 
 ### Использование
