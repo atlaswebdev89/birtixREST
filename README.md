@@ -7,7 +7,7 @@
 
 Для начала необходимо добавить входящий вебхук в консоле управления bitrix24 
 
-URI для получения списка Лидов
+URI для добавления нового Лида
 
 https://test.bitrix24.by/rest/1/q8khfywwh6a3c14n/crm.lead.add, где
 
@@ -30,5 +30,33 @@ $client = new \atlasBitrixRestApi\ClientBitrix();
     $client->setHook("rest/1/q8khfywwh6a3c14n");
     $client->setUriApi("/crm.lead.add/");
 ```
+
+
+Формируем массив данных для нового лида 
+
+```php
+$data = [
+        "TITLE" => "Запрос с сайта",
+        "NAME" => "Дима",
+        "SECOND_NAME" =>"Петрович",
+        "LAST_NAME"=> "Смолов",
+        "CURRENCY_ID" => "USD",
+        "OPPORTUNITY" => 12500,
+        "PHONE" => [ 
+                        [ "VALUE" =>"+375111111111", "VALUE_TYPE" => "WORK"],
+                        [ "VALUE" =>"231313", "VALUE_TYPE" => "WORK"],
+                    ],
+        "EMAIL" => [
+                        ['VALUE' => "mail@yandex.by", 'VALUE_TYPE' => 'HOME'],
+                ],
+        "COMMENTS" => "ПРИВЕТ НОВЫЙ ЛИД",
+        "UTM_SOURCE" => "utm"
+    ];
+```
+
+Полный список полей доступен в официальной документации
+
+https://dev.1c-bitrix.ru/rest_help/crm/leads/crm_lead_fields.php
+
 
 ### Доступные методы
