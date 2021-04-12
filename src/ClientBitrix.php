@@ -212,7 +212,7 @@ class ClientBitrix implements \atlasBitrixRestApi\Interfaces\ClientInterface {
             }else {
                 throw new Custom\DataException ("Пустое значение номера телефона адреса");
             }
-        return $number;
+        return $phone;
     }
     
     //валидация email с помощью respectValidation
