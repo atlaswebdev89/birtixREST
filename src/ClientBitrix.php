@@ -207,15 +207,8 @@ class ClientBitrix implements \atlasBitrixRestApi\Interfaces\ClientInterface {
     //Валидация номера телефона с помощью RespectValidation
     protected function validPhone ($phone) {
             if(isset($phone) && !empty($phone)) {
-                $pattern = "/^[^a-zа-я]+$/i";
-                if(!preg_match($pattern, $phone)) {
-                     throw new Custom\DataException ("Проверьте указанный номер телефона");
-                }
-                    //Убераем из номера все кроме знака + и цифр
-                        $pattern = "/[+]?+[^0-9]+/";
-                        $number =  preg_replace($pattern, '', $phone);
-                    //Проверяем валидатором
-                    V::notEmpty()->alnum('+')->assert($number);
+                //Проверяем валидатором
+                    V::notEmpty()->digit(' ', '+', '-', '(', ')')->assert($phone);
             }else {
                 throw new Custom\DataException ("Пустое значение номера телефона адреса");
             }
